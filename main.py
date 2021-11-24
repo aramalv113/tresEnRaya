@@ -2,6 +2,10 @@
 import os
 import random
 from threading import Event
+from minimax_utility_class import generate_cells
+from minimax_utility_class import dispUboard
+from MiniMax_Algorithm import minimax_algorithm
+
 
 def Clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -19,11 +23,11 @@ def Encabezado():
     Clear()
     print("Juego de Tres en Raya")
     print("Los numeros del Tablero estan ordenados de izquierda a derecha.")
-    print(" 1 | 2 | 3 ")
-    print("-----------")
-    print(" 4 | 5 | 6 ")
-    print("-----------")
-    print(" 7 | 8 | 9 ")
+    #print(" 1 | 2 | 3 ")
+    #print("-----------")
+    #print(" 4 | 5 | 6 ")
+    #print("-----------")
+    #print(" 7 | 8 | 9 ")
     print()
 
 def Errores(Dato):
@@ -36,11 +40,12 @@ def Tablero_juego(Tablero):
     # Impresion del tablero en juego
     print("- "*20)
     print("Tablero de Juego")
-    print("",Tablero[0],"|",Tablero[1],"|",Tablero[2])
-    print("-----------")
-    print("",Tablero[3],"|",Tablero[4],"|",Tablero[5])
-    print("-----------")
-    print("",Tablero[6],"|",Tablero[7],"|",Tablero[8])
+    print()
+    print("| 1 | 2 | 3 |  |",Tablero[0],"|",Tablero[1],"|",Tablero[2],"|")
+    print("|-----------|  |-----------|")
+    print("| 4 | 5 | 6 |  |",Tablero[3],"|",Tablero[4],"|",Tablero[5],"|")
+    print("|-----------|  |-----------|")
+    print("| 7 | 8 | 9 |  |",Tablero[6],"|",Tablero[7],"|",Tablero[8],"|")
     print("- "*20)
     print()
 
@@ -59,11 +64,32 @@ def comprueba_victoria(Tablero):
 
 # Funciones de IA que aun no sabemos como mrd adaptarla a nuestro codigo
 
+def ConvertirParaIA(Tablero,Movimiento,Jugador):
+    if Movimiento == 1:
+        Tablero[0][0] = Jugador
+    elif Movimiento == 2:
+        Tablero[0][1] = Jugador
+    elif Movimiento == 3:
+        Tablero[0][2] = Jugador
+    elif Movimiento == 4:
+        Tablero[1][0] = Jugador
+    elif Movimiento == 5:
+        Tablero[1][1] = Jugador
+    elif Movimiento == 6:
+        Tablero[1][2] = Jugador
+    elif Movimiento == 7:
+        Tablero[2][0] = Jugador
+    elif Movimiento == 8:
+        Tablero[2][1] = Jugador
+    elif Movimiento == 9:
+        Tablero[2][2] = Jugador
+
 if __name__ == "__main__":
 
     # Variables
     # Guardardo del Tablero
     Tablero = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    TableroIA = [['0', '1', '2'], ['3', '4', '5'], ['6', '7', '8']]
     # Creacion Primer Jugador
     Jugador = "X"
     # Creacion de las jugadas
@@ -90,6 +116,7 @@ if __name__ == "__main__":
         if Gamemode == 'pvp':
             Encabezado()
             Tablero_juego(Tablero)
+
             print("Turno del jugador", Jugador)
             Casilla = input("Selecciona una casilla del (1-9) ")
             if VerNumero(Casilla):
@@ -129,11 +156,18 @@ if __name__ == "__main__":
         elif Gamemode == 'pve':
             Encabezado()
             Tablero_juego(Tablero)
+            #uboard = generate_cells(TableroIA)
+            #dispUboard(uboard)
+
             print("Turno del jugador", Jugador)
             if Jugador == "O":
-                Casilla = random.choice(Movimientos)
+                #Casilla = random.choice(Movimientos)
+                uboard = generate_cells(TableroIA)
+                computer_decision = minimax_algorithm(uboard)
+                Casilla = int(computer_decision)+1
             else:
                 Casilla = input("Selecciona una casilla del (1-9) ")
+
             if VerNumero(Casilla):
                 # La tabla es de 0 a 8 entonces se necesita restar 1 a la respuesta para un funcionamiento mas simple.
                 Casilla = int(Casilla) - 1
@@ -144,6 +178,7 @@ if __name__ == "__main__":
                     else:
                         # Esto sirve para que la IA no repita casillas que ya estan en uso
                         Movimientos.remove(Casilla+1)
+                        ConvertirParaIA(TableroIA,Casilla+1,Jugador)
                         Tablero[Casilla] = Jugador
                         Jugadas = Jugadas + 1
                 else:
@@ -169,3 +204,4 @@ if __name__ == "__main__":
                     break
             else:
                 Errores('Solo se Admiten numeros')
+
