@@ -89,7 +89,7 @@ def JugadorFunc():
     return Numero
 
 def valido(Tablero,Casilla):
-    if Casilla >= 0 or Casilla <= 9:
+    if Casilla >= 0 and Casilla <= 8:
         if Tablero[Casilla] != " ":
             Errores('Esa posicion ya esta en uso.')
             return False

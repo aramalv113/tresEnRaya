@@ -1,9 +1,11 @@
-from main import comprueba_victoria
+from main import valido
 import pytest
 
-# comprueba_victoria(Tablero)
+# valido(Tablero,Casilla)
 
-Tablero = ['X', 'X', 'X', 'O', 'X', 'O', 'O', 'X', 'O']
+Tablero = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
 
-def Testcomprueba_victoria():
-    assert comprueba_victoria(Tablero) == True , "Fallo en la funcion"
+@pytest.mark.parametrize("Tablero,Jugadas,Resultado", ([Tablero,10,False],[Tablero,5,True],[Tablero,4,True],[Tablero,11,False],[Tablero,9,False]) )
+
+def test_valido(Tablero,Jugadas,Resultado):
+    assert valido(Tablero,Jugadas) == Resultado
